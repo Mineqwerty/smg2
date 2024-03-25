@@ -30,3 +30,16 @@
 #include "src/s2d_engine/config.h"
 #include FONT_C_FILE
 #endif
+
+#include "car/model.inc.c"
+#include "car/anims/data.inc.c"
+#include "car/anims/table.inc.c"
+#include "trollface/model.inc.c"
+#include "fastflower/model.inc.c"
+#include "tv/model.inc.c"
+#include "tv/collision.inc.c"
+#include "screwdriver/model.inc.c"
+#include "joop/model.inc.c"
+#include "joop/anims/data.inc.c"
+#include "joop/anims/table.inc.c"
+#include "cutter_hand/model.inc.c"

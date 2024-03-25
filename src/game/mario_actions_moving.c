@@ -331,6 +331,24 @@ s32 apply_landing_accel(struct MarioState *m, f32 frictionFactor) {
     return stopped;
 }
 
+static struct SpawnParticlesInfo sDriftParticles = {
+    /* behParam:        */ 5,
+    /* count:           */ 1,
+    /* model:           */ MODEL_CARTOON_STAR,
+    /* offsetY:         */ 0,
+    /* forwardVelBase:  */ 8,
+    /* forwardVelRange: */ 4,
+    /* velYBase:        */ 20,
+    /* velYRange:       */ 15,
+    /* gravity:         */ -3,
+    /* dragStrength:    */ 0,
+    /* sizeBase:        */ 2.0f,
+    /* sizeRange:       */ 1.0f,
+};
+
+    
+
+
 void update_shell_speed(struct MarioState *m) {
     f32 maxTargetSpeed;
     f32 targetSpeed;
@@ -344,7 +362,7 @@ void update_shell_speed(struct MarioState *m) {
     if (m->floor != NULL && m->floor->type == SURFACE_SLOW) {
         maxTargetSpeed = 48.0f;
     } else {
-        maxTargetSpeed = 64.0f;
+        maxTargetSpeed = 84.0f;
     }
 
     targetSpeed = m->intendedMag * 2.0f;
@@ -364,12 +382,51 @@ void update_shell_speed(struct MarioState *m) {
     }
 
     //! No backward speed cap (shell hyperspeed)
-    if (m->forwardVel > 64.0f) {
-        m->forwardVel = 64.0f;
+    if (m->forwardVel > 120.0f) {
+        m->forwardVel = 120.0f;
     }
 
+    if (m->input & INPUT_Z_PRESSED) {
+        m->actionState = 2;
+        //m->vel[1] = 20.0f;
+        //m->pos[1] += 20.0f;
+        //set_mario_action(m, ACT_RIDING_SHELL_JUMP, 0);
+    }
+
+    if (m->input & INPUT_Z_DOWN) {
+        m->faceAngle[1] =
+        m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x200, 0x200);
+        m->marioObj->header.gfx.angle[1] = m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->marioObj->header.gfx.angle[1]), 0, 0x800, 0x800);
+        
+        register s16 diff = m->marioObj->header.gfx.angle[1] - m->faceAngle[1];
+        if (diff > 0x2000) {
+            m->marioObj->header.gfx.angle[1] = m->faceAngle[1] +0x2000;
+        }
+
+        if (diff < -0x2000) {
+            m->marioObj->header.gfx.angle[1] = m->faceAngle[1] -0x2000;
+        }
+
+        cur_obj_spawn_particles(&sDriftParticles);
+    }
+    else {
     m->faceAngle[1] =
-        m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x800, 0x800);
+        m->intendedYaw - approach_s32((s16)(m->intendedYaw - m->faceAngle[1]), 0, 0x400, 0x400);
+    }
+
+    if (!(m->input & INPUT_Z_DOWN) && m->actionState == 2) {
+        f32 angleDiff = absf(m->marioObj->header.gfx.angle[1] - m->faceAngle[1]) / 5000.0f;
+        if (angleDiff > 1.5f) {
+            angleDiff = 1.5f;
+        }
+        if (angleDiff < 1) {
+            angleDiff = 1;
+        }
+        m->forwardVel *= angleDiff;
+        m->faceAngle[1] = m->marioObj->header.gfx.angle[1];
+        m->actionState = 0;
+        
+    }
 
     apply_slope_accel(m);
 }
@@ -1200,6 +1257,7 @@ s32 act_riding_shell_ground(struct MarioState *m) {
         return set_mario_action(m, ACT_RIDING_SHELL_JUMP, 0);
     }
 
+/*
     if (m->input & INPUT_Z_PRESSED) {
         mario_stop_riding_object(m);
         if (m->forwardVel < 24.0f) {
@@ -1207,6 +1265,7 @@ s32 act_riding_shell_ground(struct MarioState *m) {
         }
         return set_mario_action(m, ACT_CROUCH_SLIDE, 0);
     }
+    */
 
     update_shell_speed(m);
     set_mario_animation(m, m->actionArg == 0 ? MARIO_ANIM_START_RIDING_SHELL : MARIO_ANIM_RIDING_SHELL);

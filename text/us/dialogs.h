@@ -1,102 +1,45 @@
 // Parameters: dialog enum ID, (unused), lines per box, left offset, width
 
-#ifdef VERSION_EU
-#define COMRADES "friends"
-#define PLASTERED "splattered"
-#define SCAM_ME "cheat!\n"
-#define SCRAM "get lost"
-#else
+
 #define COMRADES "comrades"
 #define PLASTERED "plastered"
 #define SCAM_ME "scam\nME. "
 #define SCRAM "scram--"
-#endif
 
 DEFINE_DIALOG(DIALOG_000, 1, 6, 30, 200, _("\
-Wow! You're smack in the\n\
-middle of the battlefield.\n\
-You'll find the Power\n\
-Stars that Bowser stole\n\
-inside the painting\n\
-worlds.\n\
-First, talk to the\n\
-Bob-omb Buddy. (Press [B]\n\
-to talk.) He'll certainly\n\
-help you out, and so will\n\
-his " COMRADES " in other\n\
-areas.\n\
-To read signs, stop, face\n\
-them and press [B]. Press [A]\n\
-or [B] to scroll ahead. You\n\
-can talk to some other\n\
-characters by facing them\n\
-and pressing [B]."))
+     Wow! You're smack in the\n\
+    middle of the battlefield.\n\
+    You'll find the Power\n\
+    Stars that Bowser stole\n\
+    inside the painting\n\
+    worlds.\n\
+    First, talk to the\n\
+    Bob-omb Buddy. (Press [B]\n\
+    to talk.) He'll certainly\n\
+    help you out, and so will\n\
+    his  in other\n\
+    areas.\n\
+    To read signs, stop, face\n\
+    them and press [B]. Press [A]\n\
+    or [B] to scroll ahead. You\n\
+    can talk to some other\n\
+    characters by facing them\n\
+    and pressing [B]."))
 
-DEFINE_DIALOG(DIALOG_001, 1, 4, 95, 200, _("\
-Watch out! If you wander\n\
-around here, you're liable\n\
-to be " PLASTERED " by a\n\
-water bomb!\n\
-Those enemy Bob-ombs love\n\
-to fight, and they're\n\
-always finding ways to\n\
-attack.\n\
-This meadow has become\n\
-a battlefield ever since\n\
-the Big Bob-omb got his\n\
-paws on the Power Star.\n\
-Can you recover the Star\n\
-for us? Cross the bridge\n\
-and go left up the path\n\
-to find the Big Bob-omb.\n\
-Please come back to see\n\
-me after you've retrieved\n\
-the Power Star!"))
+DEFINE_DIALOG(DIALOG_001, 1, 6, 95, 200, _("\
+Super mega FAST flower!"))
 
 DEFINE_DIALOG(DIALOG_002, 1, 4, 95, 200, _("\
-Hey, you! It's dangerous\n\
-ahead, so listen up! Take\n\
-my advice.\n\
-\n\
-Cross the two\n\
-bridges ahead, then\n\
-watch for falling\n\
-water bombs.\n\
-The Big Bob-omb at the\n\
-top of the mountain is\n\
-very powerful--don't let\n\
-him grab you!\n\
-We're Bob-omb Buddies,\n\
-and we're on your side.\n\
-You can talk to us\n\
-whenever you'd like to!"))
+theres a red coin somew\n\
+here in here... i wonder\n\
+wjoch one it is ..."))
 
 DEFINE_DIALOG(DIALOG_003, 1, 5, 95, 200, _("\
-Thank you, Mario! The Big\n\
-Bob-omb is nothing but a\n\
-big dud now! But the\n\
-battle for the castle has\n\
-just begun.\n\
-Other enemies are holding\n\
-the other Power Stars. If\n\
-you recover more Stars,\n\
-you can open new doors\n\
-that lead to new worlds!\n\
-My Bob-omb Buddies are\n\
-waiting for you. Be sure\n\
-to talk to them--they'll\n\
-set up cannons for you."))
+hidden grove up\n\
+a head"))
 
 DEFINE_DIALOG(DIALOG_004, 1, 3, 95, 200, _("\
-We're peace-loving\n\
-Bob-ombs, so we don't use\n\
-cannons.\n\
-But if you'd like\n\
-to blast off, we don't\n\
-mind. Help yourself.\n\
-We'll prepare all of the\n\
-cannons in this course for\n\
-you to use. Bon Voyage!"))
+race away"))
 
 DEFINE_DIALOG(DIALOG_005, 1, 3, 30, 200, _("\
 Hey, Mario! Is it true\n\
@@ -134,74 +77,62 @@ Here you go--you've won\n\
 it, fair and square!"))
 
 DEFINE_DIALOG(DIALOG_008, 1, 4, 30, 200, _("\
-BEWARE OF CHAIN CHOMP\n\
-Extreme Danger!\n\
-Get close and press [C]^\n\
-for a better look.\n\
-Scary, huh?\n\
-See the Red Coin on top\n\
-of the stake?\n\
+Mario: Yippee i did it\n\
 \n\
-When you collect eight of\n\
-them, a Power Star will\n\
-appear in the meadow\n\
-across the bridge."))
+\n\
+Raquna: good job on\n\
+killing bowser mario\n\
+the kingdom is safe now thanks to you\n\
+Mario: i didnt kill him h\n\
+hes not dead i need to \n\
+train to get better\n\
+Raquna: ok mario good luck"))
 
-DEFINE_DIALOG(DIALOG_009, 1, 5, 30, 200, _("\
-Long time, no see! Wow,\n\
-have you gotten fast!\n\
-Have you been training\n\
-on the sly, or is it the\n\
-power of the Stars?\n\
-I've been feeling down\n\
-about losing the last\n\
-race. This is my home\n\
-course--how about a\n\
-rematch?\n\
-The goal is in\n\
-Windswept Valley.\n\
-Ready?\n\
+DEFINE_DIALOG(DIALOG_009, 1, 3, 30, 200, _("\
+Mario: hey can i go\n\
+on this bridge prety \n\
+please\n\
+Gunther: wow look\n\
+an outsider cool\n\
+wow i wanna play\n\
+Kunther: the rules\n\
+are the rules\n\
 \n\
-//Go//// Don't Go"))
+Mario: snap\n\
+\n\
+\n\
+Gunther: yeah im\n\
+sorry maybe look\n\
+somewhere else?\n\
+Kunther: the rules\n\
+are the rules\n\
+"))
 
 DEFINE_DIALOG(DIALOG_010, 1, 4, 30, 200, _("\
-You've stepped on the\n\
-Wing Cap Switch. Wearing\n\
-the Wing Cap, you can\n\
-soar through the sky.\n\
-Now Wing Caps will pop\n\
-out of all the red blocks\n\
-you find.\n\
-\n\
-Would you like to Save?\n\
-\n\
-//Yes////No"))
+for fucks sake\n\
+i didnt want this\n\
+to be my next rom\n\
+hack appearance\n\
+drawn to life 64\n\
+the next chapter when?"))
 
 DEFINE_DIALOG(DIALOG_011, 1, 4, 30, 200, _("\
-You've just stepped on\n\
-the Metal Cap Switch!\n\
-The Metal Cap makes\n\
-Mario invincible.\n\
-Now Metal Caps will\n\
-pop out of all of the\n\
-green blocks you find.\n\
-\n\
-Would you like to Save?\n\
-\n\
-//Yes////No"))
+you need to be \n\
+mentally unwell to\n\
+finish a major hack."))
 
-DEFINE_DIALOG(DIALOG_012, 1, 4, 30, 200, _("\
-You've just stepped on\n\
-the Vanish Cap Switch.\n\
-The Vanish Cap makes\n\
-Mario disappear.\n\
-Now Vanish Caps will pop\n\
-from all of the blue\n\
-blocks you find.\n\
-\n\
-Would you like to Save?\n\
-\n\
-//Yes////No"))
+DEFINE_DIALOG(DIALOG_012, 1, 11, 30, 200, _("\
+um ackshually umm\n\
+anybody with enough\n\
+willpower to uhhm\n\
+(readjusts glasses)\n\
+finsh um a major super\n\
+mario 64 rom hack\n\
+is probably, um\n\
+very well off \n\
+mentally and capa\n\
+ble of undertaking\n\
+such a large project"))
 
 DEFINE_DIALOG(DIALOG_013, 1, 5, 30, 200, _("\
 You've collected 100\n\
@@ -219,20 +150,16 @@ Do you want to Save?\n\
 \n\
 //You Bet//Not Now"))
 
-DEFINE_DIALOG(DIALOG_015, 1, 4, 30, 200, _("\
-You can punch enemies to\n\
-knock them down. Press [A]\n\
-to jump, [B] to punch.\n\
-Press [A] then [B] to Kick.\n\
-To pick something up,\n\
-press [B], too. To throw\n\
-something you're holding,\n\
-press [B] again."))
+DEFINE_DIALOG(DIALOG_015, 1, 5, 30, 200, _("\
+somebody committed\n\
+identity theft on me\n\
+and I got evicted from\n\
+dark star due to legal\n\
+issues\n\
+i fucking hate anime"))
 
 DEFINE_DIALOG(DIALOG_016, 1, 3, 30, 200, _("\
-Hop on the shiny shell and\n\
-ride wherever you want to\n\
-go! Shred those enemies!"))
+welcome to STAR ROAD!"))
 
 DEFINE_DIALOG(DIALOG_017, 1, 4, 30, 200, _("\
 I'm the Big Bob-omb, lord\n\
@@ -271,12 +198,7 @@ Shhh! Please walk\n\
 quietly in the hallway!"))
 
 DEFINE_DIALOG(DIALOG_020, 1, 6, 95, 150, _("\
-Dear Mario:\n\
-Please come to the\n\
-castle. I've baked\n\
-a cake for you.\n\
-Yours truly--\n\
-Princess Toadstool"))
+"))
 
 DEFINE_DIALOG(DIALOG_021, 1, 5, 95, 200, _("\
 Welcome.\n\
@@ -384,18 +306,12 @@ around while flying, and\n\
 press [Z] to land."))
 
 DEFINE_DIALOG(DIALOG_033, 1, 6, 30, 200, _("\
-Ciao! You've reached\n\
-Princess Toadstool's\n\
-castle via a warp pipe.\n\
-Using the controller is a\n\
-piece of cake. Press [A] to\n\
-jump and [B] to attack.\n\
-Press [B] to read signs,\n\
-too. Use the Control Stick\n\
-in the center of the\n\
-controller to move Mario\n\
-around. Now, head for\n\
-the castle."))
+hi guys wlecome to my\n\
+first hack. there are \n\
+5 stars i think, also\n\
+rom manager broke some\n\
+stuff srry!!!!!!\n\
+-"))
 
 DEFINE_DIALOG(DIALOG_034, 1, 6, 30, 200, _("\
 Good afternoon. The\n\
@@ -861,16 +777,12 @@ again to launch Bowser.\n\
 Good luck, Mario! Our\n\
 fate is in your hands."))
 
-DEFINE_DIALOG(DIALOG_067, 1, 5, 30, 200, _("\
-Tough luck, Mario!\n\
-Princess Toadstool isn't\n\
-here...Gwa ha ha!! Go\n\
-ahead--just try to grab\n\
-me by the tail!\n\
-You'll never be able to\n\
-swing ME around! A wimp\n\
-like you won't throw me\n\
-out of here! Never! Ha!"))
+DEFINE_DIALOG(DIALOG_067, 1, 4, 30, 200, _("\
+grarrrghh im gonna kill\n\
+you mario!\n\
+then the princess will \n\
+finally be mine!\n\
+bwa  haha ha"))
 
 DEFINE_DIALOG(DIALOG_068, 1, 5, 30, 200, _("\
 It's Lethal Lava Land!\n\

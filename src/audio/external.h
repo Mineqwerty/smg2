@@ -30,6 +30,7 @@ struct SequenceQueueItem {
 
 extern s32 gAudioErrorFlags;
 extern f32 gGlobalSoundSource[3];
+extern f32 gFrequencyMod;
 
 // defined in data.c, used by the game
 extern u32 gAudioRandom;

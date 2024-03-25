@@ -25,6 +25,7 @@
 #include "puppyprint.h"
 #include "debug_box.h"
 #include "engine/colors.h"
+#include "src/buffers/framebuffers.h"
 
 struct SpawnInfo gPlayerSpawnInfos[1];
 struct GraphNode *gGraphNodePointers[MODEL_ID_COUNT];
@@ -388,7 +389,10 @@ void render_game(void) {
 
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, gBorderHeight, SCREEN_WIDTH,
                       SCREEN_HEIGHT - gBorderHeight);
+
+        if (gCurrLevelNum != LEVEL_LLL && gCurrLevelNum != LEVEL_BBH) {
         render_hud();
+        }
 
         gDPSetScissor(gDisplayListHead++, G_SC_NON_INTERLACE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         render_text_labels();

@@ -8,10 +8,10 @@ void bhv_bowser_bomb_loop(void) {
     }
 
     if (o->oInteractStatus & INT_STATUS_HIT_MINE) {
-        spawn_object(o, MODEL_BOWSER_FLAMES, bhvBowserBombExplosion);
-        create_sound_spawner(SOUND_GENERAL_BOWSER_BOMB_EXPLOSION);
-        set_camera_shake_from_point(SHAKE_POS_LARGE, o->oPosX, o->oPosY, o->oPosZ);
-        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        //spawn_object(o, MODEL_BOWSER_FLAMES, bhvBowserBombExplosion);
+        //create_sound_spawner(SOUND_GENERAL_BOWSER_BOMB_EXPLOSION);
+        //set_camera_shake_from_point(SHAKE_POS_LARGE, o->oPosX, o->oPosY, o->oPosZ);
+        //o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
     }
 
     set_object_visibility(o, 7000);

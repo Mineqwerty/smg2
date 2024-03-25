@@ -22,6 +22,8 @@
 #include "sm64.h"
 #include "text_strings.h"
 
+#include "src/audio/external.h"
+
 #include "eu_translation.h"
 #if MULTILANG
 #undef LANGUAGE_FUNCTION
@@ -852,15 +854,15 @@ void check_erase_menu_clicked_buttons(struct Object *eraseButton) {
 void render_sound_mode_menu_buttons(struct Object *soundModeButton) {
     // Stereo option button
     sMainMenuButtons[MENU_BUTTON_STEREO] = spawn_object_rel_with_rot(
-        soundModeButton, MODEL_MAIN_MENU_GENERIC_BUTTON, bhvMenuButton,  533, SOUND_BUTTON_Y, -100, 0x0, -0x8000, 0x0);
+        soundModeButton, MODEL_NONE, bhvMenuButton,  5033, SOUND_BUTTON_Y, -100, 0x0, -0x8000, 0x0);
     sMainMenuButtons[MENU_BUTTON_STEREO]->oMenuButtonScale = MENU_BUTTON_SCALE;
     // Mono option button
     sMainMenuButtons[MENU_BUTTON_MONO] = spawn_object_rel_with_rot(
-        soundModeButton, MODEL_MAIN_MENU_GENERIC_BUTTON, bhvMenuButton,    0, SOUND_BUTTON_Y, -100, 0x0, -0x8000, 0x0);
+        soundModeButton, MODEL_TROLLFACE, bhvMenuButton,    69, SOUND_BUTTON_Y, -100, 0x0, -0x8000, 0x0);
     sMainMenuButtons[MENU_BUTTON_MONO]->oMenuButtonScale = MENU_BUTTON_SCALE;
     // Headset option button
     sMainMenuButtons[MENU_BUTTON_HEADSET] = spawn_object_rel_with_rot(
-        soundModeButton, MODEL_MAIN_MENU_GENERIC_BUTTON, bhvMenuButton, -533, SOUND_BUTTON_Y, -100, 0x0, -0x8000, 0x0);
+        soundModeButton, MODEL_NONE, bhvMenuButton, -5033, SOUND_BUTTON_Y, -100, 0x0, -0x8000, 0x0);
     sMainMenuButtons[MENU_BUTTON_HEADSET]->oMenuButtonScale = MENU_BUTTON_SCALE;
 
 #if MULTILANG
@@ -1071,23 +1073,24 @@ static const Vec3s sSaveFileButtonInitPositions[] = {
  * Unlike buttons on submenus, these are never hidden or recreated.
  */
 void bhv_menu_button_manager_init(void) {
+    gFrequencyMod = 1.0f;
     // File A
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_A] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE_A);
-    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_A]->oMenuButtonScale = 1.0f;
+    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_A]->oMenuButtonScale = 0.3f;
     // File B
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_B] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE_B);
-    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_B]->oMenuButtonScale = 1.0f;
+    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_B]->oMenuButtonScale = 1.1f;
     // File C
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_C] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE_C);
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_C]->oMenuButtonScale = 1.0f;
     // File D
     sMainMenuButtons[MENU_BUTTON_PLAY_FILE_D] = SPAWN_FILE_SELECT_FILE_BUTTON_INIT(SAVE_FILE_D);
-    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_D]->oMenuButtonScale = 1.0f;
+    sMainMenuButtons[MENU_BUTTON_PLAY_FILE_D]->oMenuButtonScale = 2.0f;
     // Score menu button
     sMainMenuButtons[MENU_BUTTON_SCORE] =
-        spawn_object_rel_with_rot(o, MODEL_MAIN_MENU_GREEN_SCORE_BUTTON,
-                                  bhvMenuButton, -6400, -3500, 0, 0x0, 0x0, 0x0);
-    sMainMenuButtons[MENU_BUTTON_SCORE]->oMenuButtonScale = 1.0f;
+        spawn_object_rel_with_rot(o, MODEL_MARIO,
+                                  bhvMenuButton, -6400, -1500, 0, 0x0, 0x0, 0x0);
+    sMainMenuButtons[MENU_BUTTON_SCORE]->oMenuButtonScale = 5.1f;
     // Copy menu button
     sMainMenuButtons[MENU_BUTTON_COPY] =
         spawn_object_rel_with_rot(o, MODEL_MAIN_MENU_BLUE_COPY_BUTTON,
@@ -1096,7 +1099,7 @@ void bhv_menu_button_manager_init(void) {
     // Erase menu button
     sMainMenuButtons[MENU_BUTTON_ERASE] =
         spawn_object_rel_with_rot(o, MODEL_MAIN_MENU_RED_ERASE_BUTTON,
-                                  bhvMenuButton,  2134, -3500, 0, 0x0, 0x0, 0x0);
+                                  bhvMenuButton,  2134, -30500, 0, 0x0, 0x0, 0x0);
     sMainMenuButtons[MENU_BUTTON_ERASE]->oMenuButtonScale = 1.0f;
     // Sound mode menu button (Option Mode in EU)
     sMainMenuButtons[MENU_BUTTON_SOUND_MODE] =
@@ -1255,7 +1258,7 @@ void bhv_menu_button_manager_loop(void) {
         // STEREO, MONO and HEADSET buttons are undefined so they can be selected without
         // exiting the Options menu, as a result they added a return button
         case MENU_BUTTON_STEREO:  return_to_main_menu(MENU_BUTTON_SOUND_MODE, sMainMenuButtons[MENU_BUTTON_STEREO ]); break;
-        case MENU_BUTTON_MONO:    return_to_main_menu(MENU_BUTTON_SOUND_MODE, sMainMenuButtons[MENU_BUTTON_MONO   ]); break;
+        //case MENU_BUTTON_MONO:    return_to_main_menu(MENU_BUTTON_SOUND_MODE, sMainMenuButtons[MENU_BUTTON_MONO   ]); break;
         case MENU_BUTTON_HEADSET: return_to_main_menu(MENU_BUTTON_SOUND_MODE, sMainMenuButtons[MENU_BUTTON_HEADSET]); break;
     }
 
@@ -1550,27 +1553,30 @@ void print_score_menu_strings(void) {
  */
 void copy_menu_display_message(s8 messageID) {
 
-    switch (messageID) {
-        case COPY_MSG_MAIN_TEXT:
-            if (sAllFilesExist) {
-                print_generic_string_fade(NOFILE_COPY_X, 190, LANGUAGE_ARRAY(textNoFileToCopyFrom));
-            } else {
+    
+            
+                print_generic_string_fade(15, 210, LANGUAGE_ARRAY(textNoFileToCopyFrom));
+
+                print_generic_string_fade(295, 30, LANGUAGE_ARRAY(textNoFileToCopyFrom));
+            
                 print_hud_lut_string_fade(HUD_LUT_DIFF, COPY_FILE_X, 35, LANGUAGE_ARRAY(textCopyFile));
-            }
-            break;
-        case COPY_MSG_COPY_WHERE:
-            print_generic_string_fade(COPYIT_WHERE_X, 190, LANGUAGE_ARRAY(textCopyItToWhere));
-            break;
-        case COPY_MSG_NOSAVE_EXISTS:
-            print_generic_string_fade(NOSAVE_DATA_X2, 190, textNoSavedDataExistsCopy);
-            break;
-        case COPY_MSG_COPY_COMPLETE:
-            print_generic_string_fade(COPYCOMPLETE_X, 190, LANGUAGE_ARRAY(textCopyCompleted));
-            break;
-        case COPY_MSG_SAVE_EXISTS:
-            print_generic_string_fade(SAVE_EXISTS_X1, 190, LANGUAGE_ARRAY(textSavedDataExists));
-            break;
-    }
+            
+            
+        
+            print_generic_string_fade(74, 100, LANGUAGE_ARRAY(textCopyItToWhere));
+
+            print_generic_string_fade(120, 230, LANGUAGE_ARRAY(textSavedDataExists));
+            
+        
+            print_generic_string_fade(39, 130, textNoSavedDataExistsCopy);
+            
+        
+            print_generic_string_fade(COPYCOMPLETE_X, 20, LANGUAGE_ARRAY(textCopyCompleted));
+            
+        
+            print_generic_string_fade(SAVE_EXISTS_X1, 150, LANGUAGE_ARRAY(textSavedDataExists));
+            
+    
 }
 
 /**
@@ -1637,6 +1643,10 @@ void print_copy_menu_strings(void) {
     print_save_file_star_count(SAVE_FILE_B, 211, 76);
     print_save_file_star_count(SAVE_FILE_C, 90, 119);
     print_save_file_star_count(SAVE_FILE_D, 211, 119);
+    print_save_file_star_count(SAVE_FILE_A, 40, 36);
+    print_save_file_star_count(SAVE_FILE_B, 81, 76);
+    print_save_file_star_count(SAVE_FILE_C, 170, 199);
+    print_save_file_star_count(SAVE_FILE_D, 239, 19);
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_end);
     // Print menu names
     gSPDisplayList(gDisplayListHead++, dl_ia_text_begin);
@@ -1894,9 +1904,11 @@ void print_sound_mode_menu_strings(void) {
         } else {
             gDPSetEnvColor(gDisplayListHead++, 0, 0, 0, sTextBaseAlpha);
         }
+        /*
         print_generic_string(
             get_str_x_pos_from_center(textX, LANGUAGE_ARRAY(textSoundModes[mode]), 10.0f),
             SOUND_HUD_Y, LANGUAGE_ARRAY(textSoundModes[mode]));
+            */
     }
 
 #if MULTILANG

@@ -74,15 +74,22 @@ void bhv_koopa_shell_loop(void) {
                 o->oAction = KOOPA_SHELL_ACT_MARIO_RIDING;
             }
 
-            o->oFaceAngleYaw += 0x1000;
+            //o->oFaceAngleYaw += 0x1000;
             cur_obj_move_standard(-20);
-            koopa_shell_spawn_sparkles(10.0f);
-            shell_despawn();
+            //koopa_shell_spawn_sparkles(10.0f);
+            //shell_despawn();
             break;
 
         case KOOPA_SHELL_ACT_MARIO_RIDING:
             obj_copy_pos(o, gMarioObject);
             floor = cur_obj_update_floor_height_and_get_floor();
+
+            f32 animSpeed = gMarioState->forwardVel * 0.15f;
+            if (animSpeed < 1) {
+                animSpeed = 1;
+            }
+
+            cur_obj_init_animation_with_accel_and_sound(0, animSpeed);
 
             if (absf(find_water_level(o->oPosX, o->oPosZ) - o->oPosY) < 10.0f) {
                 koopa_shell_spawn_water_drop();

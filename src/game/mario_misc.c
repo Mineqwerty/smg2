@@ -518,6 +518,28 @@ Gfx *geo_switch_mario_cap_on_off(s32 callContext, struct GraphNode *node, UNUSED
     return NULL;
 }
 
+Gfx *geo_switch_car_top(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+    struct GraphNode *next = node->next;
+    struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
+
+    if (callContext == GEO_CONTEXT_RENDER) {
+        switchCase->selectedCase = gMarioState->carTop;
+        
+    }
+    return NULL;
+}
+
+Gfx *geo_switch_mario_in_car(s32 callContext, struct GraphNode *node, UNUSED Mat4 *mtx) {
+    struct GraphNode *next = node->next;
+    struct GraphNodeSwitchCase *switchCase = (struct GraphNodeSwitchCase *) node;
+
+    if (callContext == GEO_CONTEXT_RENDER) {
+        switchCase->selectedCase = gMarioState->carTop;
+        
+    }
+    return NULL;
+}
+
 /**
  * Geo node script that makes the wings on Mario's wing cap flap.
  * Should be placed before a rotation node.

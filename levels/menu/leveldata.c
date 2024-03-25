@@ -1854,3 +1854,6 @@ const Collision main_menu_seg7_collision[] = {
 #undef COURSE_TABLE
 
 #endif
+
+#include "levels/menu/troll/model.inc.c"
+#include "levels/menu/notmario/model.inc.c"

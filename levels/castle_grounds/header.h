@@ -41,4 +41,9 @@ extern const Gfx castle_grounds_dl_waterfall[];
 // script
 extern const LevelScript level_castle_grounds_entry[];
 
+
+#include "levels/castle_grounds/header.inc.h"
+
+#include "levels/castle_grounds/sussy/geo_header.h"
+
 #endif

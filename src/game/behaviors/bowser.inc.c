@@ -930,7 +930,15 @@ s32 bowser_check_hit_mine(void) {
     struct Object *mine = cur_obj_find_nearest_object_with_behavior(bhvBowserBomb, &dist);
     if (mine != NULL && dist < 800.0f) {
         mine->oInteractStatus |= INT_STATUS_HIT_MINE;
-        return TRUE;
+        //return TRUE;
+        spawn_object(o, MODEL_BOWSER_FLAMES, bhvBowserBombExplosion);
+        create_sound_spawner(SOUND_GENERAL_BOWSER_BOMB_EXPLOSION);
+        set_camera_shake_from_point(SHAKE_POS_LARGE, o->oPosX, o->oPosY, o->oPosZ);
+        o->activeFlags = ACTIVE_FLAG_DEACTIVATED;
+        bowser_dead_hide();
+        spawn_triangle_break_particles(20, MODEL_YELLOW_COIN, 1.0f, 0);
+        bowser_spawn_collectable();
+        set_mario_npc_dialog(MARIO_DIALOG_STOP);
     }
 
     return FALSE;

@@ -33,6 +33,8 @@
 #include "sound_init.h"
 #include "rumble_init.h"
 
+#include "src/audio/external.h"
+#include "src/buffers/framebuffers.h"
 
 /**************************************************
  *                    ANIMATIONS                  *
@@ -1696,6 +1698,69 @@ void queue_rumble_particles(struct MarioState *m) {
  */
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
+    
+    for (int i = 0; i < 20; i++) {
+    gFramebuffers[(sRenderingFramebuffer + 1) % 3][590 * i] = 0xFFFF;
+    }
+
+    if (gPlayer1Controller->buttonPressed & R_JPAD) {
+        gMarioState->carTop = 1;
+    }
+
+if (gCurrLevelNum == LEVEL_CASTLE_GROUNDS) {
+    if (gMarioState->freqSign == 0) {
+        gMarioState->freqSign = 1;
+    }
+
+    if (gFrequencyMod > 2.5f) {
+        gMarioState->freqSign = -1;
+    }
+    else if (gFrequencyMod < 0.25f) {
+        gMarioState->freqSign = 1;
+    }
+    gFrequencyMod += (0.01f * gMarioState->freqSign);
+}
+else if (gCurrLevelNum == LEVEL_WF){
+    gNumLagShrooms = 0;
+    gUnlimitFPS = 0;
+    if (gMarioState->freqSign != 0) {
+    gFrequencyMod = 0.96f;
+    gMarioState->freqSign = 0;
+    }
+    else {
+        if (gGlobalTimer % 120 == 0) {
+            gFrequencyMod -= 0.01f;
+        }
+    }
+}
+else if (gCurrLevelNum == LEVEL_JRB){
+    gFrequencyMod = 1.03f;
+}
+else if (gCurrLevelNum == LEVEL_CCM){
+    gFrequencyMod = 1.00f;
+}
+else if (gCurrLevelNum == LEVEL_SSL) {
+    gFrequencyMod = 1.00f;
+    gChaosValue = 30000.0f * (sins(gGlobalTimer));
+    gFuckUpScreen = 1;
+}
+else if (gCurrLevelNum == LEVEL_BOWSER_1) {
+    gNumLagShrooms = 0;
+    gUnlimitFPS = 0;
+}
+else if (gCurrLevelNum == LEVEL_BBH) {
+    gNumLagShrooms = 0;
+    gUnlimitFPS = 0;
+    gFuckUpScreen = 0;
+}
+
+if (gFBCheck == 12) {
+    print_text(100, 100, "enable framebuffer");
+    print_text(100, 80, "emulation dipshit");
+    if (gCurrLevelNum != LEVEL_LLL){
+    initiate_warp(LEVEL_LLL, 1, 0x0A, 0);
+    }
+}
 
     // Updates once per frame:
     vec3f_get_dist_and_lateral_dist_and_angle(gMarioState->prevPos, gMarioState->pos, &gMarioState->moveSpeed, &gMarioState->lateralSpeed, &gMarioState->movePitch, &gMarioState->moveYaw);

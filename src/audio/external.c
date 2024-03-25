@@ -268,7 +268,7 @@ u8 sBackgroundMusicDefaultVolume[] = {
     70,  // SEQ_LEVEL_INSIDE_CASTLE
     75,  // SEQ_LEVEL_WATER
     75,  // SEQ_LEVEL_HOT
-    75,  // SEQ_LEVEL_BOSS_KOOPA
+    255,  // SEQ_LEVEL_BOSS_KOOPA
     70,  // SEQ_LEVEL_SNOW
     65,  // SEQ_LEVEL_SLIDE
     80,  // SEQ_LEVEL_SPOOKY
@@ -296,6 +296,10 @@ u8 sBackgroundMusicDefaultVolume[] = {
     70,  // SEQ_EVENT_CUTSCENE_ENDING
     65,  // SEQ_MENU_FILE_SELECT
     0,   // SEQ_EVENT_CUTSCENE_LAKITU (not in JP)
+    127,
+    127,
+    127,
+    127,
 };
 
 STATIC_ASSERT(ARRAY_COUNT(sBackgroundMusicDefaultVolume) == SEQ_COUNT,

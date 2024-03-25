@@ -9,6 +9,8 @@
 #include "effects.h"
 #include "external.h"
 
+f32 gFrequencyMod;
+
 void note_set_resampling_rate(struct Note *note, f32 resamplingRateInput);
 
 #if defined(VERSION_EU) || defined(VERSION_SH)
@@ -379,169 +381,6 @@ void process_notes(void) {
 
     for (i = 0; i < gMaxSimultaneousNotes; i++) {
         note = &gNotes[i];
-#if defined(VERSION_EU) || defined(VERSION_SH)
-        playbackState = (struct NotePlaybackState *) &note->priority;
-        if (note->parentLayer != NO_LAYER) {
-#ifndef NO_SEGMENTED_MEMORY
-            if ((uintptr_t) playbackState->parentLayer < 0x7fffffffU) {
-                continue;
-            }
-#endif
-#ifdef VERSION_SH
-            if (note != playbackState->parentLayer->note && playbackState->unkSH34 == 0) {
-                playbackState->adsr.action |= ADSR_ACTION_RELEASE;
-                playbackState->adsr.fadeOutVel = gAudioBufferParameters.updatesPerFrameInv;
-                playbackState->priority = 1;
-                playbackState->unkSH34 = 2;
-                goto d;
-            } else if (!playbackState->parentLayer->enabled && playbackState->unkSH34 == 0 &&
-                       playbackState->priority >= 1) {
-                // do nothing
-            } else if (playbackState->parentLayer->seqChannel->seqPlayer == NULL) {
-                sequence_channel_disable(playbackState->parentLayer->seqChannel);
-                playbackState->priority = 1;
-                playbackState->unkSH34 = 1;
-                continue;
-            } else if (playbackState->parentLayer->seqChannel->seqPlayer->muted &&
-                       (playbackState->parentLayer->seqChannel->muteBehavior
-                       & (MUTE_BEHAVIOR_STOP_NOTES))) {
-                // do nothing
-            } else {
-                goto d;
-            }
-
-            seq_channel_layer_note_release(playbackState->parentLayer);
-            audio_list_remove(&note->listItem);
-            audio_list_push_front(&note->listItem.pool->decaying, &note->listItem);
-            playbackState->priority = 1;
-            playbackState->unkSH34 = 2;
-        } else if (playbackState->unkSH34 == 0 && playbackState->priority >= 1) {
-            continue;
-        }
-#else
-            if (!playbackState->parentLayer->enabled && playbackState->priority >= NOTE_PRIORITY_MIN) {
-                goto c;
-            } else if (playbackState->parentLayer->seqChannel->seqPlayer == NULL) {
-                eu_stubbed_printf_0("CAUTION:SUB IS SEPARATED FROM GROUP");
-                sequence_channel_disable(playbackState->parentLayer->seqChannel);
-                playbackState->priority = NOTE_PRIORITY_STOPPING;
-                continue;
-            } else if (playbackState->parentLayer->seqChannel->seqPlayer->muted) {
-                if ((playbackState->parentLayer->seqChannel->muteBehavior
-                    & (MUTE_BEHAVIOR_STOP_SCRIPT | MUTE_BEHAVIOR_STOP_NOTES))) {
-                    goto c;
-                }
-            }
-            goto d;
-            if (1) {
-                c:
-                seq_channel_layer_note_release(playbackState->parentLayer);
-                audio_list_remove(&note->listItem);
-                audio_list_push_front(&note->listItem.pool->decaying, &note->listItem);
-                playbackState->priority = NOTE_PRIORITY_STOPPING;
-            }
-        } else if (playbackState->priority >= NOTE_PRIORITY_MIN) {
-            continue;
-        }
-#endif
-        d:
-        if (playbackState->priority != NOTE_PRIORITY_DISABLED) {
-            noteSubEu = &note->noteSubEu;
-#ifdef VERSION_SH
-            if (playbackState->unkSH34 >= 1 || noteSubEu->finished) {
-#else
-            if (playbackState->priority == NOTE_PRIORITY_STOPPING || noteSubEu->finished) {
-#endif
-                if (playbackState->adsr.state == ADSR_STATE_DISABLED || noteSubEu->finished) {
-                    if (playbackState->wantedParentLayer != NO_LAYER) {
-                        note_disable(note);
-                        if (playbackState->wantedParentLayer->seqChannel != NULL) {
-                            note_init_for_layer(note, playbackState->wantedParentLayer);
-                            note_vibrato_init(note);
-                            audio_list_remove(&note->listItem);
-                            audio_list_push_back(&note->listItem.pool->active, &note->listItem);
-                            playbackState->wantedParentLayer = NO_LAYER;
-                            // don't skip
-                        } else {
-                            eu_stubbed_printf_0("Error:Wait Track disappear\n");
-                            note_disable(note);
-                            audio_list_remove(&note->listItem);
-                            audio_list_push_back(&note->listItem.pool->disabled, &note->listItem);
-                            playbackState->wantedParentLayer = NO_LAYER;
-                            goto skip;
-                        }
-                    } else {
-                        note_disable(note);
-                        audio_list_remove(&note->listItem);
-                        audio_list_push_back(&note->listItem.pool->disabled, &note->listItem);
-                        goto skip;
-                    }
-                }
-            } else if (playbackState->adsr.state == ADSR_STATE_DISABLED) {
-                note_disable(note);
-                audio_list_remove(&note->listItem);
-                audio_list_push_back(&note->listItem.pool->disabled, &note->listItem);
-                goto skip;
-            }
-
-            scale = adsr_update(&playbackState->adsr);
-            note_vibrato_update(note);
-            attributes = &playbackState->attributes;
-#ifdef VERSION_SH
-            if (playbackState->unkSH34 == 1 || playbackState->unkSH34 == 2) {
-                reverbInfo.freqScale = attributes->freqScale;
-                reverbInfo.velocity = attributes->velocity;
-                reverbInfo.pan = attributes->pan;
-                reverbInfo.reverbVol = attributes->reverbVol;
-                reverbInfo.reverbBits = attributes->reverbBits;
-                reverbInfo.synthesisVolume = attributes->synthesisVolume;
-                reverbInfo.filter = attributes->filter;
-                bookOffset = noteSubEu->bookOffset;
-            } else {
-                reverbInfo.freqScale = playbackState->parentLayer->noteFreqScale;
-                reverbInfo.velocity = playbackState->parentLayer->noteVelocity;
-                reverbInfo.pan = playbackState->parentLayer->notePan;
-                reverbInfo.reverbBits = playbackState->parentLayer->reverbBits;
-                reverbInfo.reverbVol = playbackState->parentLayer->seqChannel->reverbVol;
-                reverbInfo.synthesisVolume = playbackState->parentLayer->seqChannel->synthesisVolume;
-                reverbInfo.filter = playbackState->parentLayer->seqChannel->filter;
-                bookOffset = playbackState->parentLayer->seqChannel->bookOffset & 0x7;
-                if (playbackState->parentLayer->seqChannel->seqPlayer->muted
-                    && (playbackState->parentLayer->seqChannel->muteBehavior & 8)) {
-                    reverbInfo.freqScale = 0.0f;
-                    reverbInfo.velocity = 0.0f;
-                }
-            }
-
-            reverbInfo.freqScale *= playbackState->vibratoFreqScale * playbackState->portamentoFreqScale;
-            reverbInfo.freqScale *= gAudioBufferParameters.resampleRate;
-            reverbInfo.velocity *= scale;
-            note_set_vel_pan_reverb(note, &reverbInfo);
-#else
-            if (playbackState->priority == NOTE_PRIORITY_STOPPING) {
-                frequency = attributes->freqScale;
-                velocity = attributes->velocity;
-                pan = attributes->pan;
-                reverbVol = attributes->reverbVol;
-                bookOffset = noteSubEu->bookOffset;
-            } else {
-                frequency = playbackState->parentLayer->noteFreqScale;
-                velocity = playbackState->parentLayer->noteVelocity;
-                pan = playbackState->parentLayer->notePan;
-                reverbVol = playbackState->parentLayer->seqChannel->reverbVol;
-                bookOffset = playbackState->parentLayer->seqChannel->bookOffset & 0x7;
-            }
-
-            frequency *= playbackState->vibratoFreqScale * playbackState->portamentoFreqScale;
-            frequency *= gAudioBufferParameters.resampleRate;
-            velocity = velocity * scale * scale;
-            note_set_resampling_rate(note, frequency);
-            note_set_vel_pan_reverb(note, velocity, pan, reverbVol);
-#endif
-            noteSubEu->bookOffset = bookOffset;
-            skip:;
-        }
-#else
         if (note->priority != NOTE_PRIORITY_DISABLED) {
             if (note->priority == NOTE_PRIORITY_STOPPING || note->finished) {
                 if (note->adsrVolScale == 0 || note->finished) {
@@ -595,6 +434,7 @@ void process_notes(void) {
 
             scale = note->adsrVolScale;
             frequency *= note->vibratoFreqScale * note->portamentoFreqScale;
+            frequency *= gFrequencyMod;
             cap = 3.99992f;
             if (gAiFrequency != 32006) {
                 frequency *= (32000.0f / (f32) gAiFrequency);

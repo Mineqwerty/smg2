@@ -44,6 +44,11 @@ OSContStatus gControllerStatuses[4];
 OSContPad gControllerPads[4];
 u8 gControllerBits;
 u8 gIsConsole = TRUE; // Needs to be initialized before audio_reset_session is called
+u8 gUnlimitFPS;
+u8 gNumLagShrooms;
+u8 gFuckUpScreen;
+u8 gFBCheck;
+u8 gChaosValue = 0;
 u8 gBorderHeight;
 #ifdef VANILLA_STYLE_CUSTOM_DEBUG
 u8 gCustomDebugMode;
@@ -448,22 +453,75 @@ void display_and_vsync(void) {
         gGoddardVblankCallback = NULL;
     }
     exec_display_list(&gGfxPool->spTask);
-#ifndef UNLOCK_FPS
+    
+    if (gFuckUpScreen == 1) {
+    for (int i = 0; i < 240; i+=2) {
+        for (int j = 0; j < 320; j+=2) {
+    gFramebuffers[sRenderingFramebuffer][((j * i) + 1) % 76800] = gFramebuffers[sRenderingFramebuffer][j * i];
+    gFramebuffers[sRenderingFramebuffer][((j * i) + 320) % 76800] = gFramebuffers[sRenderingFramebuffer][j * i];
+    gFramebuffers[sRenderingFramebuffer][((j * i) + 321) % 76800] = gFramebuffers[sRenderingFramebuffer][j * i];
+        }
+    }
+    }
+
+    if (gFuckUpScreen == 2 && gGlobalTimer > 400) {
+        int capValue = (gGlobalTimer - 400) * 320;
+        if (capValue > 76800) {
+            capValue = 76800;
+        }
+        for (int i = 0; i < capValue; i++) {
+            gFramebuffers[sRenderingFramebuffer][i] = random_u16();
+        }
+
+        if (gGlobalTimer % 30 == 0 && gFrequencyMod > 0.01f) {
+        gFrequencyMod -= 0.1f;
+        }
+    }
+
+    if (gFBCheck == 0) {
+        gFramebuffers[0][12] = 0xFF00;
+
+        gFBCheck = 1;
+    }
+    else if (gFBCheck < 10) {
+        gFBCheck += 1;
+    }
+    else if (gFBCheck == 10) {
+        if (gFramebuffers[0][12] == 0xFF00) {
+            gFBCheck = 12;
+        }
+        else {
+            gFBCheck = 11;
+        }
+    }
+
+if (gUnlimitFPS == 0) {
     osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
-#endif
+}
+
+
     osViSwapBuffer((void *) PHYSICAL_TO_VIRTUAL(gPhysicalFramebuffers[sRenderedFramebuffer]));
-#ifndef UNLOCK_FPS
+   if (gUnlimitFPS == 0) { 
+    
     osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
-#endif
+
+    for (int i = 0; i < gNumLagShrooms; i++) {
+        osRecvMesg(&gGameVblankQueue, &gMainReceivedMesg, OS_MESG_BLOCK);
+    }
+   }
+
     // Skip swapping buffers on emulator so that they display immediately as the Gfx task finishes
-    if (gIsConsole || gIsVC) { // Read RDP Clock Register, has a value of zero on emulators
+    //if (gIsConsole || gIsVC) { // Read RDP Clock Register, has a value of zero on emulators
         if (++sRenderedFramebuffer == 3) {
             sRenderedFramebuffer = 0;
         }
         if (++sRenderingFramebuffer == 3) {
             sRenderingFramebuffer = 0;
         }
-    }
+    //}
+
+     
+
     gGlobalTimer++;
 }
 

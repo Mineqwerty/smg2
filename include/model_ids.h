@@ -414,7 +414,7 @@
 #define MODEL_WOODEN_POST                 0x6B        // wooden_post_geo
 
 // group 15
-#define MODEL_MIPS                        0x64        // mips_geo
+#define MODEL_MIPS                        0x67        // mips_geo
 #define MODEL_BOO_CASTLE                  0x65        // boo_castle_geo
 #define MODEL_LAKITU                      0x66        // lakitu_geo
 
@@ -571,5 +571,11 @@
 #define MODEL_THI_WARP_PIPE                       MODEL_LEVEL_GEOMETRY_16   // warp_pipe_geo
 #define MODEL_VCUTM_WARP_PIPE                     MODEL_LEVEL_GEOMETRY_16   // warp_pipe_geo
 #define MODEL_CASTLE_GROUNDS_WARP_PIPE            MODEL_LEVEL_GEOMETRY_16   // warp_pipe_geo
+
+
+#define MODEL_TROLLFACE         0x100
+#define MODEL_FAST_FLOWER         0x101
+#define MODEL_TV         0x102
+#define MODEL_SCREWDRIVER         0x103
 
 #endif // MODEL_IDS_H

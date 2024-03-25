@@ -34,6 +34,8 @@ const LevelScript level_main_menu_entry_file_select[] = {
     LOAD_MODEL_FROM_GEO(MODEL_MAIN_MENU_MARIO_NEW_BUTTON_FADE,  geo_menu_mario_new_button_fade),
     LOAD_MODEL_FROM_GEO(MODEL_MAIN_MENU_PURPLE_SOUND_BUTTON,    geo_menu_sound_button),
     LOAD_MODEL_FROM_GEO(MODEL_MAIN_MENU_GENERIC_BUTTON,         geo_menu_generic_button),
+    LOAD_MODEL_FROM_GEO(MODEL_TROLLFACE,         troll_geo),
+    LOAD_MODEL_FROM_GEO(MODEL_MARIO,         notmario_geo),
 
     AREA(/*index*/ 1, geo_menu_file_select_strings_and_menu_cursor),
         OBJECT(/*model*/ MODEL_NONE,                         /*pos*/ 0, 0, -19000, /*angle*/ 0, 0, 0, /*behParam*/ BP(0x04, 0x00, 0x00, 0x00), /*beh*/ bhvMenuButtonManager),
@@ -53,7 +55,7 @@ const LevelScript level_main_menu_entry_file_select[] = {
     SLEEP(/*frames*/ 16),
     CLEAR_LEVEL(),
     SLEEP_BEFORE_EXIT(/*frames*/ 1),
-    SET_REG(/*value*/ START_LEVEL),
+    SET_REG(LEVEL_CASTLE_GROUNDS),
     EXIT_AND_EXECUTE(/*seg*/ SEGMENT_GLOBAL_LEVEL_SCRIPT, _scriptsSegmentRomStart, _scriptsSegmentRomEnd, level_main_scripts_entry),
 };
 

@@ -1,3 +1,4 @@
+#include "texscroll.h"
 #include <ultra64.h>
 
 #include "sm64.h"
@@ -1128,7 +1129,7 @@ s32 update_level(void) {
 
     switch (sCurrPlayMode) {
         case PLAY_MODE_NORMAL:
-            changeLevel = play_mode_normal();
+            changeLevel = play_mode_normal(); scroll_textures();
             break;
         case PLAY_MODE_PAUSED:
             changeLevel = play_mode_paused();
@@ -1301,6 +1302,12 @@ s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
     sWarpCheckpointActive = FALSE;
     gCurrLevelNum = levelNum;
     gCurrCourseNum = gLevelToCourseNumTable[levelNum - 1];
+	if (gCurrLevelNum == LEVEL_LLL) return 0;
+	if (gCurrLevelNum == LEVEL_BBH) return 0;
+	if (gCurrLevelNum == LEVEL_THI) return 0;
+	if (gCurrLevelNum == LEVEL_CCM) return 0;
+	if (gCurrLevelNum == LEVEL_BOB) return 0;
+	if (gCurrLevelNum == LEVEL_CASTLE_GROUNDS) return 0;
 
     if (gCurrDemoInput != NULL || gCurrCreditsEntry != NULL || gCurrCourseNum == COURSE_NONE) {
         return FALSE;
@@ -1329,6 +1336,8 @@ s32 lvl_set_current_level(UNUSED s16 initOrUpdate, s32 levelNum) {
  * Play the "thank you so much for to playing my game" sound.
  */
 s32 lvl_play_the_end_screen_sound(UNUSED s16 initOrUpdate, UNUSED s32 levelNum) {
-    play_sound(SOUND_MENU_THANK_YOU_PLAYING_MY_GAME, gGlobalSoundSource);
+    play_secondary_music(SEQ_STREAMED_SUS, 0, 255, 10);
+    gGlobalTimer = 0;
+    gFuckUpScreen = 2;
     return TRUE;
 }

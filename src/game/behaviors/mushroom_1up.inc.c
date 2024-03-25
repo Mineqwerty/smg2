@@ -17,6 +17,12 @@ void bhv_1up_interact(void) {
 #if ENABLE_RUMBLE
         queue_rumble_data(5, 80);
 #endif
+if (cur_obj_has_model(MODEL_1UP)) {
+    gNumLagShrooms += 1;
+}
+if (cur_obj_has_model(MODEL_FAST_FLOWER)) {
+    gUnlimitFPS = 1;
+}
     }
 }
 
@@ -202,6 +208,8 @@ void bhv_1up_sliding_loop(void) {
 
 void bhv_1up_loop(void) {
     bhv_1up_interact();
+    pole_1up_move_towards_mario();
+    object_step();
     set_object_visibility(o, 3000);
 }
 

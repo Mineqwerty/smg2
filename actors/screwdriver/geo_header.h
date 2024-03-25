@@ -1,0 +1,11 @@
+extern const GeoLayout screwdriver_geo[];
+extern Lights1 screwdriver_f3d_material_004_lights;
+extern Lights1 screwdriver_f3d_material_005_lights;
+extern Vtx screwdriver_Circle_001_mesh_layer_1_vtx_0[124];
+extern Gfx screwdriver_Circle_001_mesh_layer_1_tri_0[];
+extern Vtx screwdriver_Circle_001_mesh_layer_1_vtx_1[40];
+extern Gfx screwdriver_Circle_001_mesh_layer_1_tri_1[];
+extern Gfx mat_screwdriver_f3d_material_004[];
+extern Gfx mat_screwdriver_f3d_material_005[];
+extern Gfx screwdriver_Circle_001_mesh_layer_1[];
+extern Gfx screwdriver_material_revert_render_settings[];

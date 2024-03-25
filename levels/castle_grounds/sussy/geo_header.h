@@ -1,0 +1,10 @@
+extern const GeoLayout sussy_geo[];
+extern Lights1 sussy_f3d_material_002_lights;
+extern u8 sussy_susy_ci8[];
+extern u8 sussy_susy_ci8_pal_rgba16[];
+extern Vtx sussy_Plane_002_mesh_layer_4_vtx_0[4];
+extern Gfx sussy_Plane_002_mesh_layer_4_tri_0[];
+extern Gfx mat_sussy_f3d_material_002[];
+extern Gfx mat_revert_sussy_f3d_material_002[];
+extern Gfx sussy_Plane_002_mesh_layer_4[];
+extern Gfx sussy_material_revert_render_settings[];

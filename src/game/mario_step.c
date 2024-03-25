@@ -9,6 +9,8 @@
 #include "game_init.h"
 #include "interaction.h"
 #include "mario_step.h"
+#include "src/game/area.h"
+#include "include/behavior_data.h"
 
 #include "config.h"
 
@@ -342,6 +344,26 @@ static s32 perform_ground_quarter_step(struct MarioState *m, Vec3f nextPos) {
     return GROUND_STEP_NONE;
 }
 
+extern void warp_camera(f32 displacementX, f32 displacementY, f32 displacementZ);
+s32 check_level_loop(Vec3f intendedPos) {
+    if (intendedPos[0] < -16384.f) {
+        intendedPos[0] += 32768.f;
+        warp_camera(32768.f,0.f,0.f);
+    }
+    if (intendedPos[0] > 16384.f) {
+        intendedPos[0] -= 32768.f;
+        warp_camera(-32768.f,0.f,0.f);
+    }
+    if (intendedPos[2] < -16384.f) {
+        intendedPos[2] += 32768.f;
+        warp_camera(0.f,0.f,32768.f);
+    }
+    if (intendedPos[2] > 16384.f) {
+        intendedPos[2] -= 32768.f;
+        warp_camera(0.f,0.f,-32768.f);
+    }
+}
+
 s32 perform_ground_step(struct MarioState *m) {
     s32 i;
     u32 stepResult;
@@ -355,6 +377,10 @@ s32 perform_ground_step(struct MarioState *m) {
         intendedPos[2] = m->pos[2] + m->floor->normal.y * (m->vel[2] / numSteps);
         intendedPos[1] = m->pos[1];
 
+        if (gCurrLevelNum == LEVEL_BBH) {
+        check_level_loop(intendedPos);
+        }
+
         stepResult = perform_ground_quarter_step(m, intendedPos);
         if (stepResult == GROUND_STEP_LEFT_GROUND || stepResult == GROUND_STEP_HIT_WALL_STOP_QSTEPS) {
             break;
@@ -363,7 +389,19 @@ s32 perform_ground_step(struct MarioState *m) {
 
     m->terrainSoundAddend = mario_get_terrain_sound_addend(m);
     vec3f_copy(m->marioObj->header.gfx.pos, m->pos);
+
+    if (m->action != ACT_RIDING_SHELL_GROUND) {
     vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+    }
+    else if (m->actionState != 2) {
+    vec3s_set(m->marioObj->header.gfx.angle, 0, m->faceAngle[1], 0);
+    }
+
+    if (gCurrLevelNum == LEVEL_JRB) {
+        struct Object *starObj = spawn_object_relative(0, 0, 0, 0, m->marioObj, MODEL_STAR, bhvStar);
+        SET_BPARAM1(starObj->oBehParams, STAR_BP_ACT_100_COINS);
+        starObj->oInteractionSubtype = INT_SUBTYPE_NO_EXIT;
+    }
 
     if (stepResult == GROUND_STEP_HIT_WALL_CONTINUE_QSTEPS) {
         stepResult = GROUND_STEP_HIT_WALL;
@@ -687,6 +725,10 @@ s32 perform_air_step(struct MarioState *m, u32 stepArg) {
         intendedPos[0] = m->pos[0] + m->vel[0] / numSteps;
         intendedPos[1] = m->pos[1] + m->vel[1] / numSteps;
         intendedPos[2] = m->pos[2] + m->vel[2] / numSteps;
+
+        if (gCurrLevelNum == LEVEL_BBH) {
+        check_level_loop(intendedPos);
+        }
 
         quarterStepResult = perform_air_quarter_step(m, intendedPos, stepArg);
 

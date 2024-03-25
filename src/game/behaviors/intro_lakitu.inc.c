@@ -73,7 +73,7 @@ void bhv_intro_lakitu_loop(void) {
 
     switch (o->oAction) {
         case INTRO_LAKITU_ACT_INIT:
-            cur_obj_disable_rendering();
+            //cur_obj_disable_rendering();
 
             o->oIntroLakituSplineSegment = 0.0f;
             o->oIntroLakituSplineSegmentProgress = 0.0f;

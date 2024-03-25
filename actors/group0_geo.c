@@ -16,3 +16,11 @@
 #include "water_splash/geo.inc.c"
 #include "sparkle_animation/geo.inc.c"
 #include "mario/geo.inc.c"
+
+#include "car/geo.inc.c"
+#include "trollface/geo.inc.c"
+#include "fastflower/geo.inc.c"
+#include "tv/geo.inc.c"
+#include "screwdriver/geo.inc.c"
+#include "joop/geo.inc.c"
+#include "cutter_hand/geo.inc.c"

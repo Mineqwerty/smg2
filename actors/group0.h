@@ -331,4 +331,26 @@ extern const Gfx white_particle_small_dl_end[];
 extern const Gfx white_particle_small_dl[];
 extern const Gfx white_particle_small_unused_dl[];
 
+#include "mario/geo_header.h"
+
+#include "car/geo_header.h"
+
+
+#include "car/anim_header.h"
+#include "trollface/geo_header.h"
+
+#include "fastflower/geo_header.h"
+
+#include "tv/geo_header.h"
+
+#include "tv/collision_header.h"
+
+#include "screwdriver/geo_header.h"
+
+#include "joop/geo_header.h"
+
+
+#include "joop/anim_header.h"
+#include "cutter_hand/geo_header.h"
+
 #endif

@@ -55,7 +55,7 @@ void bhv_red_coin_loop(void) {
             }
 
             // On all versions but the JP version, each coin collected plays a higher noise.
-            play_sound(SOUND_MENU_COLLECT_RED_COIN
+            play_sound(SOUND_SLURP
                        + (((u8) o->parentObj->oHiddenStarTriggerCounter - 1) << 16),
                        gGlobalSoundSource);
         }
